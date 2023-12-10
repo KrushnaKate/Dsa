@@ -1,0 +1,219 @@
+#include <iostream>
+
+#include <algorithm>
+
+using namespace std;
+
+
+
+class student{
+
+    int rollno;
+
+    char name[30];
+
+    float sgpa;
+
+
+
+    public:
+
+        int size;
+
+
+
+        student(){
+
+            size=2;
+
+        }
+
+
+
+        void accept(student list[]){
+
+            for(int i=0;i<size;i++){
+
+                cout<<"enter roll no";
+
+                cin>>list[i].rollno;
+
+                cout<<"enter name";
+
+                cin>>list[i].name;
+
+                cout<<"enter sgpa";
+
+                cin>>list[i].sgpa;
+
+            }
+
+        }
+
+
+
+        void display(student list[]){
+
+            for(int i=0;i<size;i++){
+
+                cout<<"roll no"<<list[i].rollno<<endl<<"name"<<list[i].name<<endl<<"sgpa"<<list[i].sgpa<<endl;
+
+
+
+            }
+
+        }
+
+
+
+        void bubble(student list[]){
+
+            int i,j;
+
+            
+
+
+
+            for(i=0;i<size;i++){
+
+                for(j=0;j<size-1-i;j++){
+
+                    if(list[j].rollno>list[j+1].rollno){
+
+                       std::swap(list[j],list[j+1]);
+
+                    }
+
+                }
+
+            }
+
+    }
+
+
+
+        void quick(student list[],int first,int last){
+
+            int pivot,i,j;
+
+            if(first<last){
+
+                pivot = first;
+
+                i = first;
+
+                j = last;
+
+
+
+                while(i<j){
+
+                    while(list[i].sgpa>list[pivot].sgpa){
+
+                        i++;
+
+                    }
+
+
+
+                    while(list[j].sgpa<list[pivot].sgpa){
+
+                        j--;
+
+                    }
+
+                }
+
+
+
+                if(i<j){
+
+                    std::swap(list[i],list[j]);
+
+                }
+
+
+
+                std::swap(list[pivot],list[j]);
+
+                quick(list,first,j-1);
+
+                quick(list,j+1,last);
+
+            }
+
+        }
+
+};
+
+
+
+int main(){
+
+    int ch;
+
+    student data[20],s;
+
+    s.accept(data);
+
+    cout<<"before bubble sort"<<endl;
+
+    s.display(data);
+
+    do{
+
+        cout<<"enter 1 for bubble sort"<<endl<<"enter 2 for quick sort"<<endl<<"enter 3 to exit"<<endl;
+
+
+
+        cin>>ch;
+
+
+
+        switch(ch){
+
+            case 1:
+
+            s.bubble(data);
+
+            s.display(data);
+
+            break;
+
+
+
+            case 2:
+
+            s.quick(data,0,s.size-1);
+
+            s.display(data);
+
+            break;
+
+
+
+            case 3:
+
+            cout<<"exited";
+
+            break;
+
+
+
+            default:
+
+            cout<<"enter valid choice";
+
+
+
+        }
+
+    }
+
+    while(ch!=3);
+
+    
+
+    return 0;
+
+}
