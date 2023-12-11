@@ -1,0 +1,161 @@
+#include <iostream>
+
+#include <algorithm>
+
+
+
+using namespace std;
+
+
+
+class student{
+
+    int rollno;
+
+    char name[30];
+
+    float sgpa;
+
+
+
+    public:
+
+        int size=3;
+
+
+
+        void accept(student list[]){
+
+            for(int i=0;i<size;i++){
+
+                cout<<"enter roll no";
+
+                cin>>list[i].rollno;
+
+                cout<<"enter name";
+
+                cin>>list[i].name;
+
+                cout<<"enter sgpa";
+
+                cin>>list[i].sgpa;
+
+            }
+
+        }
+
+
+
+        void display(student list[]){
+
+            for(int i=0;i<size;i++){
+
+                cout<<"roll no"<<list[i].rollno<<endl<<"name"<<list[i].name<<endl<<"sgpa"<<list[i].sgpa<<endl;
+
+
+
+            }
+
+        }
+
+
+
+        void search(student list[]){
+
+            float search;
+
+            cin>>search;
+
+
+
+            for(int i=0;i<size;i++){
+
+                if(list[i].sgpa == search){
+
+                     cout<<"roll no"<<list[i].rollno<<endl<<"name"<<list[i].name<<endl<<"sgpa"<<list[i].sgpa<<endl;
+
+
+
+                }
+
+            }
+
+        }
+
+
+
+        void quick(student list[],int first,int last){
+
+            int pivot,i,j;
+
+
+
+            if(first<last){
+
+                pivot=first;
+
+                i=first;
+
+                j=last;
+
+
+
+                while(i<j){
+
+                    while(list[i].sgpa>list[pivot].sgpa){
+
+                        i++;
+
+                    }
+
+
+
+                    while(list[j].sgpa<list[pivot].sgpa){
+
+                        j--;
+
+                    }
+
+
+
+                }
+
+
+
+                if(i<j){
+
+                    std::swap(list[i],list[j]);
+
+                }
+
+
+
+                std::swap(list[pivot],list[j]);
+
+                quick(list,first,j-1);
+
+                quick(list,j+1,last);
+
+            }
+
+        }
+
+};
+
+
+
+int main(){
+
+    student data[30],s;
+
+
+
+    s.accept(data);
+
+    //s.search(data);
+
+    s.quick(data,0,s.size - 1);
+
+    s.display(data);
+
+}
