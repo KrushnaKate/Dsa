@@ -1,0 +1,243 @@
+#include <iostream>
+
+using namespace std;
+
+
+
+const int size = 5;
+
+
+
+class queue{
+
+    int front;
+
+    int rear;
+
+    int item[size];
+
+    public:
+
+    queue(){
+
+        front = rear = -1;
+
+    }
+
+
+
+    bool isFull(){
+
+        if(((front == 0) && (rear == size - 1)) || (front == rear + 1)){
+
+            return true;
+
+        }
+
+        else{
+
+            return false;
+
+        }
+
+    }
+
+
+
+    bool isEmpty(){
+
+        return front == -1;
+
+    }
+
+
+
+    void enque(int element){
+
+        if(isFull()){
+
+            cout<<"queue is full";
+
+        }
+
+
+
+        else if(isEmpty()){
+
+            front = rear = 0;
+
+            item[rear] = element;
+
+        }
+
+
+
+        else if((front!=0) && (rear == size-1)){
+
+            rear = 0;
+
+            item[rear] = element;
+
+        }
+
+
+
+        else{
+
+            rear = (rear + 1) % size;
+
+            item[rear] = element;
+
+        }
+
+    }
+
+
+
+    int deque(){
+
+        int element;
+
+        if(isEmpty()){
+
+            return -1;
+
+        }
+
+
+
+        else if(front == rear){
+
+            element = item[front];
+
+            front = rear = -1;
+
+        }
+
+
+
+        else {
+
+            element = item[front];
+
+            front = (front + 1) % size;
+
+        }
+
+
+
+        return element;
+
+    }
+
+
+
+    void display(){
+
+        if(isEmpty()){
+
+            cout<<"empty";
+
+            return;
+
+        }
+
+
+
+    int i = front;
+
+    do {
+
+        cout << item[i] << " ";
+
+        i = (i + 1) % size;
+
+    } while (i != (rear + 1) % size && i != front);
+
+
+
+    cout << endl;
+
+    }
+
+};
+
+
+
+int main(){
+
+    queue q;
+
+    int element, ch;
+
+
+
+    do {
+
+        cout << "Select your choice" << endl
+
+             << "1 for enqueue" << endl
+
+             << "2 for dequeue" << endl
+
+             << "3 for display" << endl
+
+             << "4 for exit" << endl;
+
+        cin >> ch;
+
+
+
+        switch (ch) {
+
+        case 1:
+
+            cout << "Enter element: ";
+
+            cin >> element;
+
+            q.enque(element);
+
+            break;
+
+
+
+        case 2:
+
+            element = q.deque();
+
+            break;
+
+
+
+        case 3:
+
+            q.display();
+
+            break;
+
+
+
+        case 4:
+
+            cout << "Exited" << endl;
+
+            break;
+
+
+
+        default:
+
+            cout << "Enter correct option" << endl;
+
+        }
+
+    } while (ch != 4);
+
+
+
+    return 0;
+
+
+
+}
