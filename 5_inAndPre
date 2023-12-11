@@ -1,0 +1,231 @@
+#include <iostream>
+
+#include <stack>
+
+#include <cctype>
+
+
+
+using namespace std;
+
+
+
+class treenode{
+
+    public:
+
+    char value;
+
+    treenode* left;
+
+    treenode* right;
+
+
+
+    public:
+
+    treenode(char val){
+
+        value = val;
+
+        left = right = nullptr;
+
+    }
+
+};
+
+
+
+bool isOperand(char c){
+
+    return isalnum(c);
+
+}
+
+
+
+treenode* constructexp(const string& postfix){
+
+    stack <treenode*> s;
+
+    for(int i = 0; i<postfix.length();i++){
+
+        treenode* node = new treenode(postfix[i]);
+
+        if(isOperand(postfix[i])){
+
+            s.push(node);
+
+        }
+
+        else{
+
+            node->right = s.top();
+
+            s.pop();
+
+            node->left = s.top();
+
+            s.pop();
+
+            s.push(node);
+
+        }
+
+
+
+    }
+
+    return s.top();
+
+}
+
+
+
+void recurInorder(treenode* node){
+
+    if(node){
+
+        recurInorder(node->left);
+
+        cout<<node->value;
+
+        recurInorder(node->right);
+
+    }
+
+}
+
+
+
+void recurpreorder(treenode* node){
+
+    if(node){
+
+        cout<<node->value;
+
+        recurpreorder(node->left);
+
+        recurpreorder(node->right);
+
+    }
+
+}
+
+
+
+void NonRecIn(treenode* root){
+
+    stack <treenode*> s;
+
+    treenode* current = root;
+
+    while(current || !s.empty()){
+
+        while(current){
+
+            s.push(current);
+
+            current = current->left; 
+
+        }
+
+
+
+        current = s.top();
+
+        s.pop();
+
+        cout<<current->value;
+
+
+
+        current=current->right;
+
+    }
+
+}
+
+
+
+void NonRecPre(treenode* root){
+
+    stack <treenode*> s;
+
+    s.push(root);
+
+
+
+    while(!s.empty()){
+
+        treenode* current = s.top();
+
+        s.pop();
+
+        cout<<current->value;
+
+
+
+        if(current->right){
+
+            s.push(current->right);
+
+        }
+
+
+
+        if(current->left){
+
+            s.push(current->left);
+
+        }
+
+
+
+    }
+
+}
+
+
+
+
+
+
+
+int main(){
+
+    string postfix;
+
+    cout<<"enter postfix ";
+
+    cin>>postfix;
+
+
+
+    treenode* tree = constructexp(postfix);
+
+
+
+    NonRecIn(tree);
+
+    cout<<endl;
+
+
+
+    NonRecPre(tree);
+
+    cout<<endl;
+
+
+
+    recurInorder(tree);
+
+    cout<<endl;
+
+
+
+    recurpreorder(tree);
+
+    cout<<endl;
+
+}
