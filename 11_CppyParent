@@ -1,0 +1,321 @@
+#include <iostream>
+
+using namespace std;
+
+
+
+class Node {
+
+public:
+
+    int key;
+
+    Node* left;
+
+    Node* right;
+
+
+
+    Node(int value) {
+
+        key = value;
+
+        left = right = nullptr;
+
+    }
+
+};
+
+
+
+class BinarySearchTree {
+
+private:
+
+    Node* root;
+
+
+
+    Node* insert(Node* root, int key) {
+
+        if (root == nullptr) {
+
+            return new Node(key);
+
+        }
+
+
+
+        if (key < root->key) {
+
+            root->left = insert(root->left, key);
+
+        } else if (key > root->key) {
+
+            root->right = insert(root->right, key);
+
+        }
+
+        // Handle duplicate entries (you can modify this part as needed)
+
+
+
+        return root;
+
+    }
+
+
+
+    Node* minValueNode(Node* node) {
+
+        Node* current = node;
+
+        while (current && current->left != nullptr) {
+
+            current = current->left;
+
+        }
+
+        return current;
+
+    }
+
+
+
+    Node* deleteNode(Node* root, int key) {
+
+        if (root == nullptr) {
+
+            return root;
+
+        }
+
+
+
+        if (key < root->key) {
+
+            root->left = deleteNode(root->left, key);
+
+        } else if (key > root->key) {
+
+            root->right = deleteNode(root->right, key);
+
+        } else {
+
+            if (root->left == nullptr) {
+
+                Node* temp = root->right;
+
+                delete root;
+
+                return temp;
+
+            } else if (root->right == nullptr) {
+
+                Node* temp = root->left;
+
+                delete root;
+
+                return temp;
+
+            }
+
+
+
+            Node* temp = minValueNode(root->right);
+
+
+
+            root->key = temp->key;
+
+
+
+            root->right = deleteNode(root->right, temp->key);
+
+        }
+
+
+
+        return root;
+
+    }
+
+
+
+    void inorderTraversal(Node* root) {
+
+        if (root != nullptr) {
+
+            inorderTraversal(root->left);
+
+            cout << root->key << " ";
+
+            inorderTraversal(root->right);
+
+        }
+
+    }
+
+
+
+    Node* copyTree(Node* root) {
+
+        if (root == nullptr) {
+
+            return nullptr;
+
+        }
+
+
+
+        Node* newNode = new Node(root->key);
+
+        newNode->left = copyTree(root->left);
+
+        newNode->right = copyTree(root->right);
+
+
+
+        return newNode;
+
+    }
+
+
+
+    void displayParentNodes(Node* root, int parentKey = -1) {
+
+        if (root != nullptr) {
+
+            if (parentKey != -1) {
+
+                cout << "Parent: " << parentKey << " - Child: " << root->key << endl;
+
+            }
+
+            displayParentNodes(root->left, root->key);
+
+            displayParentNodes(root->right, root->key);
+
+        }
+
+    }
+
+
+
+public:
+
+    BinarySearchTree() {
+
+        root = nullptr;
+
+    }
+
+
+
+    void insert(int key) {
+
+        root = insert(root, key);
+
+    }
+
+
+
+    void deleteKey(int key) {
+
+        root = deleteNode(root, key);
+
+    }
+
+
+
+    void displayTree() {
+
+        inorderTraversal(root);
+
+        cout << endl;
+
+    }
+
+
+
+    BinarySearchTree copy() {
+
+        BinarySearchTree newTree;
+
+        newTree.root = copyTree(root);
+
+        return newTree;
+
+    }
+
+
+
+    void displayParentChildRelationships() {
+
+        displayParentNodes(root);
+
+    }
+
+};
+
+
+
+int main() {
+
+    BinarySearchTree bst;
+
+
+
+    bst.insert(50);
+
+    bst.insert(30);
+
+    bst.insert(70);
+
+    bst.insert(20);
+
+    bst.insert(40);
+
+    bst.insert(60);
+
+    bst.insert(80);
+
+
+
+    cout << "Original Tree: ";
+
+    bst.displayTree();
+
+
+
+    int keyToDelete = 30;
+
+    cout << "Deleting Node with key " << keyToDelete << endl;
+
+    bst.deleteKey(keyToDelete);
+
+
+
+    cout << "Tree after deletion: ";
+
+    bst.displayTree();
+
+
+
+    BinarySearchTree copyTree = bst.copy();
+
+    cout << "Copied Tree: ";
+
+    copyTree.displayTree();
+
+
+
+    cout << "Parent-Child Relationships: " << endl;
+
+    bst.displayParentChildRelationships();
+
+
+
+    return 0;
+
+}
