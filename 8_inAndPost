@@ -1,0 +1,240 @@
+#include <iostream>
+
+#include <stack>
+
+#include <cctype>
+
+
+
+using namespace std;
+
+
+
+class treenode{
+
+    public:
+
+    char value;
+
+    treenode* left;
+
+    treenode* right;
+
+
+
+    treenode(char val){
+
+        value = val;
+
+        left = right = nullptr;
+
+    }
+
+
+
+};
+
+
+
+bool isOperand(char c){
+
+    return isalnum(c);
+
+}
+
+
+
+treenode* constructtree(const string& prefix){
+
+    stack<treenode*>s;
+
+
+
+    for(int i = prefix.length() - 1;i>=0;i--){
+
+        treenode* node = new treenode(prefix[i]);
+
+        if(isOperand(prefix[i])){
+
+            s.push(node);
+
+        }
+
+        else{
+
+            node->right = s.top();
+
+            s.pop();
+
+            node->left = s.top();
+
+            s.pop();
+
+            s.push(node);
+
+        }
+
+    }
+
+
+
+    return s.top();
+
+}
+
+
+
+void recurInorder(treenode* node){
+
+    if(node){
+
+        recurInorder(node->left);
+
+        cout<<node->value;
+
+        recurInorder(node->right);
+
+    }
+
+}
+
+
+
+void recurPost(treenode* node){
+
+    if(node){
+
+        recurPost(node->left);
+
+        recurPost(node->right);
+
+        cout<<node->value;
+
+    }
+
+}
+
+
+
+void nonrecurInorder(treenode* root){
+
+    stack <treenode*> s;
+
+    treenode* current = root;
+
+
+
+    while(current || !s.empty()){
+
+        while(current){
+
+            s.push(current);
+
+            current = current->left;
+
+        }
+
+
+
+        current = s.top();
+
+        s.pop();
+
+        cout<<current->value;
+
+        current=current->right;
+
+    }
+
+}
+
+
+
+void NonRecPost(treenode* root){
+
+    stack <treenode*> s;
+
+    s.push(root);
+
+    treenode* visited = nullptr;
+
+
+
+    while(!s.empty()){
+
+        treenode* current = s.top();
+
+
+
+        if(!current){
+
+            s.pop();
+
+            visited = nullptr;
+
+        }
+
+
+
+        else if(current->left && visited != current->left && visited != current->right){
+
+            s.push(current->left);
+
+        }
+
+
+
+        else if(current->right && visited!=current->right){
+
+            s.push(current->right);
+
+        }
+
+        else{
+
+            
+
+            cout<<current->value;
+
+            visited=current;
+
+            s.pop();
+
+        }
+
+    }
+
+}
+
+
+
+int main(){
+
+    string prefix;
+
+    cin>>prefix;
+
+
+
+    treenode* tree = constructtree(prefix);
+
+
+
+    recurInorder(tree);
+
+    cout<<endl;
+
+    recurPost(tree);
+
+    cout<<endl;
+
+    nonrecurInorder(tree);
+
+    cout<<endl;
+
+    NonRecPost(tree);
+
+    cout<<endl;
+
+
+}
