@@ -1,0 +1,287 @@
+#include <iostream>
+
+using namespace std;
+
+
+
+class ThreadedNode {
+
+public:
+
+    int key;
+
+    ThreadedNode* left;
+
+    ThreadedNode* right;
+
+    bool isThreaded;
+
+
+
+    ThreadedNode(int value) {
+
+        key = value;
+
+        left = right = nullptr;
+
+        isThreaded = false;
+
+    }
+
+};
+
+
+
+class ThreadedBinaryTree {
+
+private:
+
+    ThreadedNode* root;
+
+
+
+    // Helper function to perform in-order threading
+
+    void threadInOrder(ThreadedNode* root, ThreadedNode*& prev) {
+
+        if (root != nullptr) {
+
+            threadInOrder(root->left, prev);
+
+
+
+            if (root->left == nullptr) {
+
+                root->left = prev;
+
+                root->isThreaded = true;
+
+            }
+
+
+
+            if (prev != nullptr && prev->right == nullptr) {
+
+                prev->right = root;
+
+                prev->isThreaded = true;
+
+            }
+
+
+
+            prev = root;
+
+
+
+            threadInOrder(root->right, prev);
+
+        }
+
+    }
+
+
+
+    // Helper function to find the in-order successor
+
+    ThreadedNode* inOrderSuccessor(ThreadedNode* current) {
+
+        if (current->isThreaded) {
+
+            return current->right;
+
+        } else {
+
+            current = current->right;
+
+            while (current != nullptr && !current->isThreaded) {
+
+                current = current->left;
+
+            }
+
+            return current;
+
+        }
+
+    }
+
+
+
+public:
+
+    ThreadedBinaryTree() {
+
+        root = nullptr;
+
+    }
+
+
+
+    // Function to create an in-order threaded binary tree
+
+    void createThreadedTree() {
+
+        ThreadedNode* prev = nullptr;
+
+        threadInOrder(root, prev);
+
+    }
+
+
+
+    // Function to perform in-order threaded traversal
+
+    void inOrderThreadedTraversal() {
+
+        ThreadedNode* current = root;
+
+
+
+        while (current != nullptr) {
+
+            current = inOrderSuccessor(current);
+
+
+
+            if (current != nullptr) {
+
+                cout << current->key << " ";
+
+            }
+
+        }
+
+
+
+        cout << endl;
+
+    }
+
+
+
+    // Function to perform pre-order threaded traversal
+
+    void preOrderThreadedTraversal() {
+
+        ThreadedNode* current = root;
+
+
+
+        while (current != nullptr) {
+
+            cout << current->key << " ";
+
+
+
+            if (!current->isThreaded) {
+
+                current = current->left;
+
+            } else {
+
+                // Move to the in-order successor
+
+                current = inOrderSuccessor(current);
+
+                // Skip the in-order successor's left subtree
+
+                if (current != nullptr) {
+
+                    current = current->right;
+
+                }
+
+            }
+
+        }
+
+
+
+        cout << endl;
+
+    }
+
+
+
+    // Function to insert a key into the threaded binary tree
+
+    void insert(int key) {
+
+        root = insertRecursive(root, key);
+
+    }
+
+
+
+    ThreadedNode* insertRecursive(ThreadedNode* root, int key) {
+
+        if (root == nullptr) {
+
+            return new ThreadedNode(key);
+
+        }
+
+
+
+        if (key < root->key) {
+
+            root->left = insertRecursive(root->left, key);
+
+        } else if (key > root->key) {
+
+            root->right = insertRecursive(root->right, key);
+
+        }
+
+
+
+        return root;
+
+    }
+
+};
+
+
+
+int main() {
+
+    ThreadedBinaryTree threadedTree;
+
+
+
+    threadedTree.insert(50);
+
+    threadedTree.insert(30);
+
+    threadedTree.insert(70);
+
+    threadedTree.insert(20);
+
+    threadedTree.insert(40);
+
+    threadedTree.insert(60);
+
+    threadedTree.insert(80);
+
+
+
+    threadedTree.createThreadedTree();
+
+
+
+    cout << "In-order Threaded Traversal: ";
+
+    threadedTree.inOrderThreadedTraversal();
+
+
+
+    cout << "Pre-order Threaded Traversal: ";
+
+    threadedTree.preOrderThreadedTraversal();
+
+
+
+    return 0;
+
+}
