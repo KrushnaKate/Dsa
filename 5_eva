@@ -1,0 +1,363 @@
+#include <cmath>
+
+#include <iostream>
+
+
+
+using namespace std;
+
+
+
+class node{
+
+    public:
+
+    int data;
+
+    node* next;
+
+
+
+    node(char val){
+
+        data = val;
+
+        next = nullptr;
+
+    }
+
+};
+
+
+
+class stack{
+
+    public:
+
+    node* top;
+
+
+
+    stack(){
+
+        top = nullptr;
+
+    }
+
+
+
+    bool isEmpty(){
+
+        return top == nullptr;
+
+    }
+
+
+
+    void push(int val){
+
+        node* newnode = new node(val);
+
+
+
+        newnode->next = top;
+
+        top = newnode;
+
+    }
+
+
+
+    int pop(){
+
+        if(isEmpty()){
+
+            cout<<"empty";
+
+        }
+
+        node* temp = top;
+
+        int popped = temp->data;
+
+        top = top->next;
+
+        delete temp;
+
+        return popped;
+
+    }
+
+
+
+    int peek(){
+
+        if(isEmpty()){
+
+            cout<<"empty";
+
+        }
+
+        return top->data;
+
+    }
+
+    ~stack(){
+
+        while(!isEmpty()){
+
+            pop();
+
+        }
+
+    }
+
+};
+
+
+
+bool isOperater(char c){
+
+   return (c == '+' || c == '-' || c == '*' || c == '/' || c == '^');
+
+}
+
+
+
+int PostEva(string postfix){
+
+    stack s;
+
+    int ans = 0;
+
+    for(int i = 0;i<postfix.length();i++){
+
+        if(isdigit(postfix[i])){
+
+            s.push(postfix[i]-'0');
+
+        }
+
+
+
+        else if(isOperater(postfix[i])){
+
+            int op1 = s.pop();
+
+            int op2 = s.pop();
+
+
+
+            switch(postfix[i]){
+
+                case '+':
+
+                ans = op2 + op1;
+
+                break;
+
+
+
+                case '-':
+
+                ans = op2 + op1;
+
+                break;
+
+
+
+                case '*':
+
+                ans = op2 * op1;
+
+                break;
+
+
+
+                case '/':
+
+                ans = op2 / op1;
+
+                break;
+
+
+
+                case '^':
+
+                ans = int(pow(op2,op1));
+
+                break;
+
+
+
+                default:
+
+                break;
+
+            }
+
+            s.push(ans);
+
+        }
+
+    }
+
+    return s.pop();
+
+}
+
+
+
+int PrefEva(string prefix){
+
+    stack ss;
+
+    int ans = 0;
+
+
+
+    for(int i=prefix.length();i>=0;i--){
+
+        if(isdigit(prefix[i])){
+
+            ss.push(prefix[i] - '0');
+
+        }
+
+
+
+        else if(isOperater(prefix[i])){
+
+           int op1 = ss.pop();
+
+           int op2 = ss.pop();
+
+
+
+            switch(prefix[i]){
+
+                case '+':
+
+                ans = op1 + op2;
+
+                break;
+
+
+
+                 case '-':
+
+                ans = op1 + op2;
+
+                break;
+
+
+
+                case '*':
+
+                ans = op1 * op2;
+
+                break;
+
+
+
+                case '/':
+
+                ans = op1 / op2;
+
+                break;
+
+
+
+                case '^':
+
+                ans = int(pow(op1,op2));
+
+
+
+                default:
+
+                break;
+
+            }
+
+
+
+            ss.push(ans);
+
+
+
+        }
+
+    }
+
+    return ss.pop();
+
+}
+
+
+
+int main(){
+
+    string postfix,prefix;
+
+    int ch;
+
+    int infix;
+
+    do{
+
+        cout<<"1 for postfix evalution"<<endl<<"2 for prefix evaluation"<<endl<<"3 to exit";
+
+        cin>>ch;
+
+        switch(ch){
+
+            case 1:
+
+            cout<<"enter postfix expression"<<endl;
+
+            cin>>postfix;
+
+            infix = PostEva(postfix);
+
+            cout<<infix<<endl;
+
+            break;
+
+
+
+            case 2:
+
+            cout<<"enter infix expression"<<endl;
+
+            cin>>prefix;
+
+            infix = PrefEva(prefix);
+
+            cout<<infix<<endl;
+
+            break;
+
+
+
+            case 3:
+
+            cout<<"exited";
+
+            break;
+
+
+
+            default:
+
+            break;
+
+        }
+
+    }while(ch!=3);
+
+    
+
+    return 0;
+
+}
