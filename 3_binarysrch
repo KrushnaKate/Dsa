@@ -1,0 +1,155 @@
+#include <iostream>
+
+#include <string.h>
+
+
+
+using namespace std;
+
+
+
+class student{
+
+    int rollno;
+
+    float sgpa;
+
+    char name[30];
+
+
+
+    public:
+
+    int size = 2;
+
+
+
+    void accept(student list[]){
+
+            for(int i=0;i<size;i++){
+
+                cout<<"enter roll no";
+
+                cin>>list[i].rollno;
+
+                cout<<"enter name";
+
+                cin>>list[i].name;
+
+                cout<<"enter sgpa";
+
+                cin>>list[i].sgpa;
+
+            }
+
+        }
+
+        void display(student list[]){
+
+            for(int i=0;i<size;i++){
+
+                cout<<"roll no"<<list[i].rollno<<endl<<"name"<<list[i].name<<endl<<"sgpa"<<list[i].sgpa<<endl;
+
+
+
+            }
+
+        }
+
+        void insertion(student list[]){
+
+            int i,j;
+
+            student key;
+
+            for(i=1;i<size;i++){
+
+                key = list[i];
+
+                j = i-1;
+
+                while(j>=0 && strcmp(list[j].name,key.name)>0){
+
+                    list[j+1]=list[j];
+
+                    j--;
+
+                }
+
+                list[j+1]=key;
+
+            }
+
+        }
+
+        void binary(student list[]){
+
+            int mid,upper,lower;
+
+            char search[30];
+
+            cin>>search;
+
+
+
+            upper = size - 1;
+
+            lower = 0;
+
+            while(lower<=upper){
+
+                mid = (upper+lower)/2;
+
+                
+
+                if(strcmp(list[mid].name,search)==0){
+
+                    cout<<list[mid].name<<list[mid].rollno;
+
+                    break;
+
+                }
+
+
+
+                else if(strcmp(list[mid].name,search)<0){
+
+                    lower = mid + 1;
+
+                }
+
+
+
+                else{
+
+                    upper = mid -1;
+
+                }
+
+            }
+
+
+
+            if(lower>upper){
+
+                cout<<"not found";
+
+            }
+
+        }
+
+};
+
+int main(){
+
+    student data[3],s;
+
+    s.accept(data);
+
+    s.binary(data);
+
+    //s.insertion(data);
+
+    //s.display(data);
+
+}
